@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>[hidden]{display:none!important}</style>
+<title>CrossPoint Calendar</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Calendarios para la pantalla de reposo de CrossPoint Reader (Xteink X4 Pro, 480×800). Elige diseño, año y mes y descarga el BMP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;700&family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap">
+<style>
+/* Layout: tool panel beside a life-size device mockup; stacks to device-on-top at phone width.
+   Visual idea: the page borrows the e-paper's own language — ink on grey paper, selection shown
+   as an inverted cell, exactly like "today" on a printed calendar. */
+:root {
+  --paper: #e4e6e1;      /* page ground: e-paper grey, slight green bias */
+  --panel: #f1f2ee;      /* control surface */
+  --ink: #141516;        /* text, selected controls */
+  --muted: #5d625b;      /* secondary text */
+  --rule: #c3c7bf;       /* hairlines */
+  --bezel: #2c2e2d;      /* device body */
+  --on-ink: #f1f2ee;     /* text on inverted controls */
+  --focus: #3a6fd8;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #171918; --panel: #202321; --ink: #e8eae5; --muted: #9aa097;
+    --rule: #393d3a; --bezel: #0c0d0d; --on-ink: #171918; --focus: #8fb0ff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #171918; --panel: #202321; --ink: #e8eae5; --muted: #9aa097;
+  --rule: #393d3a; --bezel: #0c0d0d; --on-ink: #171918; --focus: #8fb0ff; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font: 15px/1.5 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 28px; }
+
+header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  border-bottom: 3px solid var(--ink); padding-bottom: 14px; }
+h1 { font: 700 clamp(30px, 5vw, 44px)/1 var(--f-display); letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.spec { font: 500 12px/1.4 var(--f-mono); color: var(--muted); margin: 6px 0 0; }
+.lang-ui { display: flex; gap: 0; }
+
+main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: start; }
+@media (max-width: 860px) {
+  main { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .device-col { order: -1; }
+}
+
+/* ---- controls ---- */
+.controls { display: grid; gap: 22px; min-width: 0; }
+.field { display: grid; gap: 8px; }
+.label { font: 700 11px/1 var(--f-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1.5px solid var(--ink); width: fit-content; max-width: 100%; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label { padding: 8px 16px; font: 500 14px/1.2 var(--f-body); cursor: pointer; user-select: none;
+  border-right: 1.5px solid var(--ink); }
+.seg label:last-of-type { border-right: 0; }
+.seg input:checked + label { background: var(--ink); color: var(--on-ink); }
+.seg input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: 2px; }
+.seg label:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.seg input:checked + label:hover { background: var(--ink); }
+
+.stepper { display: inline-flex; border: 1.5px solid var(--ink); width: fit-content; }
+.stepper button { width: 40px; border: 0; background: transparent; color: var(--ink); font: 500 18px/1 var(--f-body); cursor: pointer; }
+.stepper button:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.stepper input { width: 84px; border: 0; border-inline: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+  font: 700 20px/1 var(--f-display); text-align: center; padding: 8px 0; font-variant-numeric: tabular-nums; -moz-appearance: textfield; }
+.stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+select { font: 500 14px/1.2 var(--f-body); color: var(--ink); background: var(--panel); border: 1.5px solid var(--ink);
+  padding: 8px 12px; border-radius: 0; min-width: 180px; max-width: 100%; justify-self: start; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.hint { font-size: 13px; color: var(--muted); margin: 0; }
+
+.download { display: grid; gap: 10px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; max-width: 440px;
+  padding: 14px 16px; font: 700 16px/1.2 var(--f-display); letter-spacing: 0.02em; cursor: pointer;
+  border: 1.5px solid var(--ink); background: var(--ink); color: var(--on-ink); text-align: left; }
+.btn small { font: 400 12px/1.2 var(--f-mono); opacity: 0.8; letter-spacing: 0; text-align: right; overflow-wrap: anywhere; }
+.btn.secondary { background: transparent; color: var(--ink); }
+.btn:hover { filter: brightness(1.15); }
+.btn.secondary:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); filter: none; }
+.btn:disabled { opacity: .5; cursor: progress; }
+.status { font: 400 13px/1.4 var(--f-mono); color: var(--muted); min-height: 1.4em; margin: 0; }
+
+.howto { background: var(--panel); border: 1px solid var(--rule); padding: 18px 20px; display: grid; gap: 10px; max-width: 520px; }
+.howto h2 { font: 700 18px/1.2 var(--f-display); margin: 0; }
+.howto ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.howto code, .note code { font: 500 13px var(--f-mono); background: color-mix(in srgb, var(--ink) 9%, transparent); padding: 1px 5px; }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+
+/* ---- device ---- */
+.device-col { display: grid; justify-items: center; gap: 10px; }
+.device { background: var(--bezel); padding: 22px 18px 46px; border-radius: 22px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 18px 40px -20px rgba(0,0,0,.45); position: relative; }
+.device::after { content: ""; position: absolute; left: 50%; bottom: 17px; width: 46px; height: 6px; margin-left: -23px;
+  border-radius: 3px; background: rgba(255,255,255,.14); }
+.screen { display: block; width: min(360px, 72vw); aspect-ratio: 480 / 800; height: auto; max-width: 100%;
+  background: #fff; image-rendering: auto; }
+.caption { font: 400 12px/1.4 var(--f-mono); color: var(--muted); text-align: center; }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+footer a { color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) { .btn, .seg label { transition: background-color .12s, filter .12s; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1 data-t="title">Calendario para CrossPoint</h1>
+      <p class="spec" data-t="spec">Xteink X4 Pro · 480 × 800 · BMP de 2 bits (4 grises)</p>
+    </div>
+    <div class="seg lang-ui" role="radiogroup" aria-label="Idioma / Language">
+      <input type="radio" name="ui" id="ui-es" value="es"><label for="ui-es">ES</label>
+      <input type="radio" name="ui" id="ui-en" value="en"><label for="ui-en">EN</label>
+    </div>
+  </header>
+
+  <main>
+    <section class="controls" aria-labelledby="t-controls">
+      <h2 id="t-controls" hidden>Opciones</h2>
+
+      <div class="field">
+        <span class="label" data-t="design">Diseño</span>
+        <div class="seg" role="radiogroup">
+          <input type="radio" name="design" id="d-year" value="year" checked><label for="d-year" data-t="dYear">Año completo</label>
+          <input type="radio" name="design" id="d-month" value="month"><label for="d-month" data-t="dMonth">Un mes</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="year" data-t="year">Año</label>
+        <div class="stepper">
+          <button type="button" id="year-dec" aria-label="−1">−</button>
+          <input type="number" id="year" min="1900" max="2200" inputmode="numeric">
+          <button type="button" id="year-inc" aria-label="+1">+</button>
+        </div>
+      </div>
+
+      <div class="field" id="month-field" hidden>
+        <label class="label" for="month" data-t="month">Mes</label>
+        <select id="month"></select>
+      </div>
+
+      <div class="field">
+        <span class="label" data-t="calLang">Idioma del calendario</span>
+        <div class="seg" role="radiogroup">
+          <input type="radio" name="lang" id="l-es" value="es"><label for="l-es">Español</label>
+          <input type="radio" name="lang" id="l-en" value="en"><label for="l-en">English</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="label" data-t="weekStart">La semana empieza en</span>
+        <div class="seg" role="radiogroup">
+          <input type="radio" name="week" id="w-mon" value="mon"><label for="w-mon" data-t="mon">Lunes</label>
+          <input type="radio" name="week" id="w-sun" value="sun"><label for="w-sun" data-t="sun">Domingo</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="label" data-t="format">Formato</span>
+        <div class="seg" role="radiogroup">
+          <input type="radio" name="fmt" id="f-bmp" value="bmp" checked><label for="f-bmp" data-t="fBmp">BMP (para el lector)</label>
+          <input type="radio" name="fmt" id="f-png" value="png"><label for="f-png">PNG</label>
+        </div>
+        <p class="hint" data-t="fmtHint">El BMP se ve directo en el X4 Pro, sin conversión. El PNG sirve para verlo o compartirlo.</p>
+      </div>
+
+      <div class="download">
+        <button class="btn" id="dl-one" type="button"><span data-t="dlOne">Descargar imagen</span><small id="dl-one-name"></small></button>
+        <button class="btn secondary" id="dl-zip" type="button"><span data-t="dlZip">Año completo + 12 meses (ZIP)</span><small id="dl-zip-name"></small></button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="howto">
+        <h2 data-t="howTitle">Cómo ponerlo en el lector</h2>
+        <ol>
+          <li data-t="how1">Copia el BMP a la raíz de la tarjeta SD y nómbralo <code>sleep.bmp</code>.</li>
+          <li data-t="how2">En el lector: <b>Settings → Display → Sleep Screen → Custom</b>.</li>
+          <li data-t="how3">Listo: aparece cada vez que el lector se duerme.</li>
+        </ol>
+        <p class="note" data-t="howZip">Con el ZIP puedes copiar los 12 meses a una carpeta, por ejemplo <code>/calendario</code>. Cada mes, abre el que toca en <b>Browse Files</b> y ponlo como pantalla de reposo desde el mismo lector.</p>
+      </div>
+    </section>
+
+    <div class="device-col">
+      <div class="device"><canvas class="screen" id="screen" width="480" height="800" aria-label="Vista previa"></canvas></div>
+      <p class="caption" id="caption">480 × 800</p>
+    </div>
+  </main>
+
+  <footer>
+    <span data-t="foot">Hecho para <a href="https://crosspointreader.com/" target="_blank" rel="noopener">CrossPoint Reader</a>. Sin relación oficial con el proyecto.</span>
+    <a href="https://github.com/aendom/crosspoint-calendar" target="_blank" rel="noopener">github.com/aendom/crosspoint-calendar</a>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+"use strict";
+// ---------------------------------------------------------------- text
+const UI = {
+  es: {
+    title: "Calendario para CrossPoint", spec: "Xteink X4 Pro · 480 × 800 · BMP de 2 bits (4 grises)",
+    design: "Diseño", dYear: "Año completo", dMonth: "Un mes", year: "Año", month: "Mes",
+    calLang: "Idioma del calendario", weekStart: "La semana empieza en", mon: "Lunes", sun: "Domingo",
+    format: "Formato", fBmp: "BMP (para el lector)",
+    fmtHint: "El BMP se ve directo en el X4 Pro, sin conversión. El PNG sirve para verlo o compartirlo.",
+    dlOne: "Descargar imagen", dlZip: "Año completo + 12 meses (ZIP)",
+    howTitle: "Cómo ponerlo en el lector",
+    how1: "Copia el BMP a la raíz de la tarjeta SD y nómbralo <code>sleep.bmp</code>.",
+    how2: "En el lector: <b>Settings → Display → Sleep Screen → Custom</b>.",
+    how3: "Listo: aparece cada vez que el lector se duerme.",
+    howZip: "Con el ZIP puedes copiar los 12 meses a una carpeta, por ejemplo <code>/calendario</code>. Cada mes, abre el que toca en <b>Browse Files</b> y ponlo como pantalla de reposo desde el mismo lector.",
+    foot: 'Hecho para <a href="https://crosspointreader.com/" target="_blank" rel="noopener">CrossPoint Reader</a>. Sin relación oficial con el proyecto.',
+    building: "Generando…", saved: "Descargado: ", declined: "Descarga cancelada.", failed: "No se pudo descargar: ",
+    zipped: "Aquí el BMP va dentro de un ZIP. En la página de GitHub se descarga directo.",
+  },
+  en: {
+    title: "Calendar for CrossPoint", spec: "Xteink X4 Pro · 480 × 800 · 2-bit BMP (4 grays)",
+    design: "Design", dYear: "Full year", dMonth: "One month", year: "Year", month: "Month",
+    calLang: "Calendar language", weekStart: "Week starts on", mon: "Monday", sun: "Sunday",
+    format: "Format", fBmp: "BMP (for the reader)",
+    fmtHint: "BMP displays on the X4 Pro directly, with no conversion. PNG is for viewing or sharing.",
+    dlOne: "Download image", dlZip: "Full year + 12 months (ZIP)",
+    howTitle: "How to put it on the reader",
+    how1: "Copy the BMP to the root of the SD card and name it <code>sleep.bmp</code>.",
+    how2: "On the reader: <b>Settings → Display → Sleep Screen → Custom</b>.",
+    how3: "Done: it shows every time the reader goes to sleep.",
+    howZip: "With the ZIP you can copy all 12 months to a folder such as <code>/calendar</code>. Each month, open the right one in <b>Browse Files</b> and set it as the sleep screen from the reader itself.",
+    foot: 'Made for <a href="https://crosspointreader.com/" target="_blank" rel="noopener">CrossPoint Reader</a>. Not affiliated with the project.',
+    building: "Generating…", saved: "Downloaded: ", declined: "Download cancelled.", failed: "Could not download: ",
+    zipped: "Here the BMP comes inside a ZIP. On the GitHub page it downloads directly.",
+  },
+};
+
+const CAL = {
+  es: { months: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
+        wd1: ["L","M","M","J","V","S","D"], wd3: ["LUN","MAR","MIÉ","JUE","VIE","SÁB","DOM"],
+        file: "calendario", start: "mon" },
+  en: { months: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+        wd1: ["M","T","W","T","F","S","S"], wd3: ["MON","TUE","WED","THU","FRI","SAT","SUN"],
+        file: "calendar", start: "sun" },
+};
+
+// ---------------------------------------------------------------- state
+const $ = (s) => document.querySelector(s);
+const state = { design: "year", year: new Date().getFullYear(), month: new Date().getMonth() + 1,
+                lang: "es", week: null, fmt: "bmp", ui: "es" };
+try {
+  const saved = JSON.parse(localStorage.getItem("cp-cal") || "null");
+  if (saved) Object.assign(state, saved);
+} catch (e) { /* storage unavailable: defaults */ }
+if (!localStorageHas()) {
+  const nav = (navigator.language || "es").slice(0, 2);
+  state.ui = state.lang = nav === "es" ? "es" : "en";
+}
+function localStorageHas() { try { return !!localStorage.getItem("cp-cal"); } catch (e) { return false; } }
+function persist() { try { localStorage.setItem("cp-cal", JSON.stringify(state)); } catch (e) {} }
+
+// ---------------------------------------------------------------- calendar math
+// Monday-first index: Mon=0 … Sun=6
+function firstWeekday(y, m) { return (new Date(y, m - 1, 1).getDay() + 6) % 7; }
+function daysIn(y, m) { return new Date(y, m, 0).getDate(); }
+function weeks(y, m, startMon, pad = true) {
+  const offset = (firstWeekday(y, m) - (startMon ? 0 : 6) + 7) % 7;
+  const out = [];
+  let row = new Array(7).fill(0);
+  for (let i = 0; i < offset; i++) row[i] = 0;
+  let col = offset;
+  for (let d = 1; d <= daysIn(y, m); d++) {
+    row[col++] = d;
+    if (col === 7) { out.push(row); row = new Array(7).fill(0); col = 0; }
+  }
+  if (col) out.push(row);
+  while (pad && out.length < 6) out.push(new Array(7).fill(0));
+  return out;
+}
+function cols(lang, startMon) {
+  const order = startMon ? [0,1,2,3,4,5,6] : [6,0,1,2,3,4,5];
+  return { wd1: order.map(i => CAL[lang].wd1[i]), wd3: order.map(i => CAL[lang].wd3[i]),
+           sunday: order.indexOf(6) };
+}
+
+// ---------------------------------------------------------------- drawing
+const W = 480, H = 800;
+const metricsCache = new Map();
+function metrics(g, font) {
+  if (!metricsCache.has(font)) {
+    g.font = font;
+    const m = g.measureText("Hg");
+    metricsCache.set(font, { a: m.fontBoundingBoxAscent, d: m.fontBoundingBoxDescent });
+  }
+  return metricsCache.get(font);
+}
+// Anchors match the Python generator: l/m/r horizontally, a (ascender top) or m (middle) vertically.
+function text(g, x, y, s, font, anchor = "la", fill = "#000") {
+  g.font = font;
+  g.fillStyle = fill;
+  g.textAlign = { l: "left", m: "center", r: "right" }[anchor[0]];
+  g.textBaseline = "alphabetic";
+  const { a, d } = metrics(g, font);
+  const base = anchor[1] === "a" ? y + a : y + (a - d) / 2;
+  g.fillText(s, x, base);
+}
+function rect(g, x0, y0, x1, y1) { g.fillStyle = "#000"; g.fillRect(x0, y0, x1 - x0, y1 - y0); }
+function line(g, x0, y0, x1, y1, w = 1) {
+  g.fillStyle = "#000";
+  if (y0 === y1) g.fillRect(Math.min(x0, x1), Math.round(y0), Math.abs(x1 - x0), w);
+  else g.fillRect(Math.round(x0), Math.min(y0, y1), w, Math.abs(y1 - y0));
+}
+
+const PLEX = '"IBM Plex Sans", sans-serif', PLEXC = '"IBM Plex Sans Condensed", sans-serif', INTER = 'Inter, sans-serif';
+
+function drawYear(g, o) {
+  const c = cols(o.lang, o.startMon), L = CAL[o.lang];
+  const M = 18, GAP = 16, colw = (W - 2 * M - 2 * GAP) / 3, cell = colw / 7;
+  const F = { year: `700 68px ${PLEX}`, month: `700 15px ${PLEX}`, wd: `500 10px ${PLEXC}`,
+              day: `400 14px ${PLEXC}`, bold: `700 14px ${PLEXC}` };
+  text(g, M - 4, 6, String(o.year), F.year);
+  rect(g, M, 96, W - M, 99);
+  const top = 114, rowh = 17.5, blockh = 168;
+  for (let i = 0; i < 12; i++) {
+    const m = i + 1, cx = M + (i % 3) * (colw + GAP), cy = top + Math.floor(i / 3) * blockh;
+    text(g, cx, cy, L.months[i].toUpperCase(), F.month);
+    c.wd1.forEach((s, k) => text(g, cx + cell * k + cell / 2, cy + 26, s, F.wd, "ma"));
+    line(g, cx, cy + 40, cx + colw, cy + 40);
+    weeks(o.year, m, o.startMon).forEach((wk, r) => wk.forEach((day, k) => {
+      if (day) text(g, cx + cell * k + cell / 2, cy + 46 + r * rowh, String(day), k === c.sunday ? F.bold : F.day, "ma");
+    }));
+  }
+}
+
+function drawMonth(g, o) {
+  const c = cols(o.lang, o.startMon), L = CAL[o.lang];
+  const M = 28;
+  const name = L.months[o.month - 1];
+  let size = 56;
+  g.font = `700 ${size}px ${INTER}`;
+  while (g.measureText(name).width > W - 2 * M && size > 36) { size -= 2; g.font = `700 ${size}px ${INTER}`; }
+  const fMon = `700 ${size}px ${INTER}`, fYr = `300 ${size}px ${INTER}`;
+  text(g, M - 2, 30, name, fMon);
+  g.font = fMon; const nx = M - 2 + g.measureText(name).width + 12;
+  g.font = fYr; const yw = g.measureText(String(o.year)).width;
+  let gy = 120;
+  if (nx + yw > W - M) { text(g, M - 2, 30 + size * 1.1, String(o.year), fYr); gy = 120 + Math.floor(size * 1.1); }
+  else text(g, nx, 30, String(o.year), fYr);
+
+  const F = { wd: `600 11px ${INTER}`, big: `400 25px ${INTER}`, bigb: `700 25px ${INTER}`,
+              smt: `700 16px ${INTER}`, smwd: `600 9px ${INTER}`, sm: `400 14px ${INTER}`, smb: `700 14px ${INTER}` };
+  const gw = W - 2 * M, cw = gw / 7;
+  rect(g, M, gy, W - M, gy + 2);
+  c.wd3.forEach((s, k) => text(g, M + cw * k + cw / 2, gy + 12, s, F.wd, "ma"));
+  const rh = 46, g0 = gy + 40;
+  const real = weeks(o.year, o.month, o.startMon, false);
+  real.forEach((wk, r) => {
+    const ry = g0 + r * rh;
+    line(g, M, ry, W - M, ry);
+    wk.forEach((day, k) => {
+      if (day) text(g, M + cw * k + cw / 2, ry + rh / 2, String(day), k === c.sunday ? F.bigb : F.big, "mm");
+    });
+  });
+  const gend = g0 + real.length * rh;
+  rect(g, M, gend, W - M, gend + 2);
+
+  const GAP = 28, sw = (gw - GAP) / 2, sc = sw / 7, sy = gend + 40 + (6 - real.length) * 10;
+  for (let j = 0; j < 2; j++) {
+    let mm = o.month + 1 + j, yy = o.year;
+    if (mm > 12) { mm -= 12; yy += 1; }
+    const sx = M + j * (sw + GAP);
+    text(g, sx, sy, L.months[mm - 1] + (yy === o.year ? "" : ` ${yy}`), F.smt);
+    c.wd1.forEach((s, k) => text(g, sx + sc * k + sc / 2, sy + 28, s, F.smwd, "ma"));
+    line(g, sx, sy + 44, sx + sw, sy + 44);
+    weeks(yy, mm, o.startMon).forEach((wk, r) => wk.forEach((day, k) => {
+      if (day) text(g, sx + sc * k + sc / 2, sy + 54 + r * 27, String(day), k === c.sunday ? F.smb : F.sm, "ma");
+    }));
+  }
+}
+
+// Render to an offscreen canvas and snap every pixel to the X4's 4 gray levels,
+// so the preview is exactly what the reader will show.
+function render(o) {
+  const cv = document.createElement("canvas");
+  cv.width = W; cv.height = H;
+  const g = cv.getContext("2d", { willReadFrequently: true });
+  g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
+  (o.design === "year" ? drawYear : drawMonth)(g, o);
+  const img = g.getImageData(0, 0, W, H), p = img.data;
+  const levels = new Uint8Array(W * H);
+  for (let i = 0, j = 0; i < p.length; i += 4, j++) {
+    const lum = (77 * p[i] + 150 * p[i + 1] + 29 * p[i + 2]) >> 8;
+    const lv = Math.min(3, Math.floor((lum * 3 + 127) / 255));
+    levels[j] = lv;
+    p[i] = p[i + 1] = p[i + 2] = lv * 85; p[i + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  return { canvas: cv, levels };
+}
+
+// Uncompressed 2-bit BMP (index 0 = black … 3 = white), the format CrossPoint draws natively.
+function bmp2(levels) {
+  const rowBytes = Math.ceil((W * 2) / 32) * 4, dataSize = rowBytes * H, off = 14 + 40 + 16;
+  const buf = new ArrayBuffer(off + dataSize), v = new DataView(buf), u = new Uint8Array(buf);
+  v.setUint8(0, 0x42); v.setUint8(1, 0x4d);
+  v.setUint32(2, off + dataSize, true); v.setUint32(10, off, true);
+  v.setUint32(14, 40, true); v.setInt32(18, W, true); v.setInt32(22, H, true);
+  v.setUint16(26, 1, true); v.setUint16(28, 2, true); v.setUint32(30, 0, true);
+  v.setUint32(34, dataSize, true); v.setInt32(38, 2835, true); v.setInt32(42, 2835, true);
+  v.setUint32(46, 4, true); v.setUint32(50, 0, true);
+  for (let i = 0; i < 4; i++) { const c = i * 85; u.set([c, c, c, 0], 54 + i * 4); }
+  for (let y = 0; y < H; y++) {
+    const rowStart = off + (H - 1 - y) * rowBytes;       // bottom-up rows
+    for (let x = 0; x < W; x++) u[rowStart + (x >> 2)] |= levels[y * W + x] << (6 - (x & 3) * 2);
+  }
+  return new Blob([buf], { type: "image/bmp" });
+}
+function png(canvas) { return new Promise(r => canvas.toBlob(r, "image/png")); }
+
+// ---------------------------------------------------------------- files
+function slug(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+function fileName(o) {
+  const L = CAL[o.lang];
+  const base = o.design === "year" ? `${L.file}-${o.year}`
+    : `${L.file}-${o.year}-${String(o.month).padStart(2, "0")}-${slug(L.months[o.month - 1])}`;
+  return `${base}.${o.fmt}`;
+}
+function zipName(o) { return `${CAL[o.lang].file}-${o.year}-${o.lang}.zip`; }
+async function blobFor(o) { const r = render(o); return o.fmt === "bmp" ? bmp2(r.levels) : png(r.canvas); }
+
+// Inside the Claude viewer, files go through its download prompt (BMP is not on its list, so it is
+// zipped there). Everywhere else — GitHub Pages, a local copy — a normal browser download.
+let dlApi;
+const inViewer = !!(window.claude && window.claude.use);
+const viewerReady = inViewer ? window.claude.use("downloads").then(d => (dlApi = d)).catch(() => null) : Promise.resolve(null);
+
+async function deliver(name, blob, o) {
+  await viewerReady;
+  if (dlApi) {
+    if (!/\.(png|zip)$/i.test(name)) {
+      const z = new JSZip(); z.file(name, blob);
+      blob = await z.generateAsync({ type: "blob" });
+      name = name.replace(/\.[a-z]+$/i, ".zip");
+      say(t("zipped"));
+    }
+    try { await dlApi.save({ filename: name, data: blob }); say(t("saved") + name); }
+    catch (e) { say(e && e.code === "declined" ? t("declined") : t("failed") + (e && e.message || e)); }
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  say(t("saved") + name);
+}
+
+// ---------------------------------------------------------------- UI wiring
+const t = (k) => UI[state.ui][k];
+function say(s) { $("#status").textContent = s; }
+function opts(over = {}) {
+  const startMon = (state.week || CAL[state.lang].start) === "mon";
+  return { design: state.design, year: state.year, month: state.month, lang: state.lang,
+           startMon, fmt: state.fmt, ...over };
+}
+function check(name, value) { const el = document.querySelector(`input[name="${name}"][value="${value}"]`); if (el) el.checked = true; }
+
+function applyUI() {
+  document.documentElement.lang = state.ui;
+  document.querySelectorAll("[data-t]").forEach(el => { el.innerHTML = t(el.dataset.t); });
+  const sel = $("#month"), cur = state.month;
+  sel.innerHTML = CAL[state.lang].months.map((m, i) => `<option value="${i + 1}">${m}</option>`).join("");
+  sel.value = String(cur);
+  check("ui", state.ui); check("design", state.design); check("lang", state.lang);
+  check("week", state.week || CAL[state.lang].start); check("fmt", state.fmt);
+  $("#year").value = state.year;
+  $("#month-field").hidden = state.design !== "month";
+}
+
+let pending = 0;
+function update() {
+  applyUI();
+  const o = opts();
+  const r = render(o);
+  const g = $("#screen").getContext("2d");
+  g.drawImage(r.canvas, 0, 0);
+  $("#dl-one-name").textContent = fileName(o);
+  $("#dl-zip-name").textContent = zipName(o);
+  $("#caption").textContent = `${fileName(o)} · 480 × 800`;
+  persist();
+}
+
+document.addEventListener("change", (e) => {
+  const el = e.target;
+  if (el.name === "ui") state.ui = el.value;
+  if (el.name === "design") state.design = el.value;
+  if (el.name === "lang") { state.lang = el.value; state.week = null; }   // week start follows the language
+  if (el.name === "week") state.week = el.value;
+  if (el.name === "fmt") state.fmt = el.value;
+  if (el.id === "month") state.month = +el.value;
+  if (el.id === "year") setYear(+el.value);
+  update();
+});
+$("#year").addEventListener("input", (e) => { const y = +e.target.value; if (y >= 1900 && y <= 2200) { state.year = y; update(); } });
+function setYear(y) { state.year = Math.min(2200, Math.max(1900, Math.round(y) || new Date().getFullYear())); }
+$("#year-dec").addEventListener("click", () => { setYear(state.year - 1); update(); });
+$("#year-inc").addEventListener("click", () => { setYear(state.year + 1); update(); });
+
+$("#dl-one").addEventListener("click", async (e) => {
+  const btn = e.currentTarget; btn.disabled = true; say(t("building"));
+  try { const o = opts(); await deliver(fileName(o), await blobFor(o), o); }
+  finally { btn.disabled = false; }
+});
+$("#dl-zip").addEventListener("click", async (e) => {
+  const btn = e.currentTarget; btn.disabled = true; say(t("building"));
+  try {
+    const z = new JSZip(), base = opts();
+    const yearO = { ...base, design: "year" };
+    z.file(fileName(yearO), await blobFor(yearO));
+    for (let m = 1; m <= 12; m++) { const mo = { ...base, design: "month", month: m }; z.file(fileName(mo), await blobFor(mo)); }
+    const blob = await z.generateAsync({ type: "blob", compression: "DEFLATE" });
+    await deliver(zipName(base), blob, base);
+  } finally { btn.disabled = false; }
+});
+
+// Draw once immediately, then again when the web fonts arrive.
+update();
+const FONTS = [`700 68px ${PLEX}`, `700 15px ${PLEX}`, `400 14px ${PLEXC}`, `500 10px ${PLEXC}`, `700 14px ${PLEXC}`,
+               `300 56px ${INTER}`, `400 25px ${INTER}`, `500 12px ${INTER}`, `600 11px ${INTER}`, `700 56px ${INTER}`];
+Promise.all(FONTS.map(f => document.fonts.load(f, "0123456789 ÁÉÍÓÚáéíóúMÉS"))).then(() => { metricsCache.clear(); update(); });
+</script>
+
+</body>
+</html>
