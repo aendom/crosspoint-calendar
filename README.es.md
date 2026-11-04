@@ -6,7 +6,7 @@ Un generador web de calendarios para la pantalla de reposo de [CrossPoint Reader
 
 *[Read in English](README.md)*
 
-![El generador](docs/preview-es.png)
+![El generador](docs/screenshot-es.png)
 
 Elige un diseño, un año y, si quieres, un mes. Descarga la imagen y cópiala a tu lector. Todo funciona en tu navegador: no hay servidor, no necesitas cuenta y no hay nada que instalar.
 
@@ -44,10 +44,10 @@ La pantalla del X4 Pro muestra 4 niveles de gris, y CrossPoint dibuja los BMP de
 
 ## Úsalo por tu cuenta
 
-Todo el generador es un solo archivo, `index.html`. Ábrelo en cualquier navegador, o haz un fork de este repositorio y activa GitHub Pages (**Settings → Pages → Deploy from a branch → `main` / root**).
+Todo el generador es `index.html` y la carpeta `fonts/`. Ábrelo en cualquier navegador, o haz un fork de este repositorio y activa GitHub Pages (**Settings → Pages → Deploy from a branch → `main` / root**).
 
 ## Licencia
 
-MIT. Las fuentes se cargan desde Google Fonts y usan la licencia SIL Open Font License.
+MIT. Las fuentes de `fonts/` (IBM Plex e Inter) usan la licencia SIL Open Font License.
 
 Este proyecto no está afiliado a CrossPoint Reader.

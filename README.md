@@ -6,7 +6,7 @@ A web generator for e-ink calendar images for [CrossPoint Reader](https://crossp
 
 *[Leer en español](README.es.md)*
 
-![The generator](docs/preview.png)
+![The generator](docs/screenshot-en.png)
 
 Pick a design, a year and, if you want, a month. Then download the image and copy it to your reader. Everything runs in your browser: there is no server, no account and nothing to install.
 
@@ -44,10 +44,10 @@ The X4 Pro screen shows 4 levels of gray, and CrossPoint draws 2-bit BMP files d
 
 ## Run it yourself
 
-The whole generator is one file, `index.html`. Open it in any browser, or fork this repo and turn on GitHub Pages (**Settings → Pages → Deploy from a branch → `main` / root**).
+The whole generator is `index.html` plus the `fonts/` folder. Open it in any browser, or fork this repo and turn on GitHub Pages (**Settings → Pages → Deploy from a branch → `main` / root**).
 
 ## License
 
-MIT. The fonts are loaded from Google Fonts under the SIL Open Font License.
+MIT. The fonts in `fonts/` (IBM Plex and Inter) are under the SIL Open Font License.
 
 Not affiliated with the CrossPoint Reader project.
