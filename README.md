@@ -18,6 +18,10 @@ Pick a design, a year and, if you want, a month. Then download the image and cop
 
 Calendars come in **Spanish or English**, with the week starting on **Monday or Sunday**. Sundays are bold.
 
+![Year and month calendars made with the generator](docs/results-en.png)
+
+These are the actual images the generator downloads, at the reader's 480 × 800 size.
+
 ## Put it on your reader
 
 1. Download the **BMP**.

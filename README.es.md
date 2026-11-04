@@ -18,6 +18,10 @@ Elige un diseño, un año y, si quieres, un mes. Descarga la imagen y cópiala a
 
 Los calendarios vienen en **español o inglés**, y la semana puede empezar en **lunes o domingo**. Los domingos van en negritas.
 
+![Calendarios anual y mensual hechos con el generador](docs/results-es.png)
+
+Estas son las imágenes reales que descarga el generador, al tamaño del lector: 480 × 800.
+
 ## Cómo ponerlo en el lector
 
 1. Descarga el **BMP**.
