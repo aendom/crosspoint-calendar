@@ -6,7 +6,7 @@ Un generador web de calendarios para la pantalla de reposo de [CrossPoint Reader
 
 *[Read in English](README.md)*
 
-![El generador](docs/screenshot-es.png)
+![El generador](docs/generator-es.png)
 
 Elige tu dispositivo, un diseño, un año y, si quieres, un mes. Descarga la imagen y cópiala a tu lector. Todo funciona en tu navegador: no hay servidor, no necesitas cuenta y no hay nada que instalar.
 

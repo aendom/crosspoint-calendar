@@ -6,7 +6,7 @@ A web generator for e-ink calendar images for [CrossPoint Reader](https://crossp
 
 *[Leer en español](README.es.md)*
 
-![The generator](docs/screenshot-en.png)
+![The generator](docs/generator-en.png)
 
 Pick your device, a design, a year and, if you want, a month. Then download the image and copy it to your reader. Everything runs in your browser: there is no server, no account and nothing to install.
 
