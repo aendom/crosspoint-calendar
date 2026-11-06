@@ -6,7 +6,7 @@
 <style>[hidden]{display:none!important}</style>
 <title>CrossPoint Calendar</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Calendarios para la pantalla de reposo de CrossPoint Reader (Xteink X4 Pro, 480×800). Elige diseño, año y mes y descarga el BMP.">
+<meta name="description" content="Calendar images for the CrossPoint Reader sleep screen. Pick your device, a design, a year and a month, and download the BMP.">
 <style>
 /* Fonts ship with the page (fonts/, SIL Open Font License), so nothing loads from a third party. */
 @font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/plex-sans-400.woff2") format("woff2"); }
@@ -83,6 +83,10 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; ali
 .stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 select { font: 500 14px/1.2 var(--f-body); color: var(--ink); background: var(--panel); border: 1.5px solid var(--ink);
   padding: 8px 12px; border-radius: 0; min-width: 180px; max-width: 100%; justify-self: start; }
+.num { width: 96px; font: 700 16px/1.2 var(--f-display); text-align: center; font-variant-numeric: tabular-nums;
+  color: var(--ink); background: var(--panel); border: 1.5px solid var(--ink); padding: 8px 6px; border-radius: 0; -moz-appearance: textfield; }
+.num::-webkit-outer-spin-button, .num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.custom { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font: 500 14px var(--f-mono); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .hint { font-size: 13px; color: var(--muted); margin: 0; }
 
@@ -124,7 +128,7 @@ footer a { color: var(--ink); }
   <header>
     <div>
       <h1 data-t="title">Calendario para CrossPoint</h1>
-      <p class="spec" data-t="spec">Xteink X4 Pro · 480 × 800 · BMP de 2 bits (4 grises)</p>
+      <p class="spec" id="spec">Xteink X4 · 480 × 800 · BMP de 2 bits (4 grises)</p>
     </div>
     <div class="seg lang-ui" role="radiogroup" aria-label="Idioma / Language">
       <input type="radio" name="ui" id="ui-es" value="es"><label for="ui-es">ES</label>
@@ -135,6 +139,18 @@ footer a { color: var(--ink); }
   <main>
     <section class="controls" aria-labelledby="t-controls">
       <h2 id="t-controls" hidden>Opciones</h2>
+
+      <div class="field">
+        <label class="label" for="device" data-t="device">Dispositivo</label>
+        <select id="device"></select>
+        <div class="custom" id="custom" hidden>
+          <input class="num" type="number" id="cw" min="240" max="2048" inputmode="numeric" aria-label="Width">
+          <span>×</span>
+          <input class="num" type="number" id="ch" min="240" max="2048" inputmode="numeric" aria-label="Height">
+          <span data-t="px">px, vertical</span>
+        </div>
+        <p class="hint" data-t="deviceHint">CrossPoint muestra la imagen píxel por píxel, sin escalar, así que tiene que coincidir con tu pantalla.</p>
+      </div>
 
       <div class="field">
         <span class="label" data-t="design">Diseño</span>
@@ -180,7 +196,7 @@ footer a { color: var(--ink); }
           <input type="radio" name="fmt" id="f-bmp" value="bmp" checked><label for="f-bmp" data-t="fBmp">BMP (para el lector)</label>
           <input type="radio" name="fmt" id="f-png" value="png"><label for="f-png">PNG</label>
         </div>
-        <p class="hint" data-t="fmtHint">El BMP se ve directo en el X4 Pro, sin conversión. El PNG sirve para verlo o compartirlo.</p>
+        <p class="hint" data-t="fmtHint">El BMP se ve directo en el lector, sin conversión. El PNG sirve para verlo o compartirlo.</p>
       </div>
 
       <div class="download">
@@ -218,11 +234,13 @@ footer a { color: var(--ink); }
 // ---------------------------------------------------------------- text
 const UI = {
   es: {
-    title: "Calendario para CrossPoint", spec: "Xteink X4 Pro · 480 × 800 · BMP de 2 bits (4 grises)",
+    title: "Calendario para CrossPoint", specFmt: "BMP de 2 bits (4 grises)",
+    device: "Dispositivo", px: "px, vertical", custom: "Tamaño personalizado",
+    deviceHint: "CrossPoint muestra la imagen píxel por píxel, sin escalar, así que tiene que coincidir con tu pantalla.",
     design: "Diseño", dYear: "Año completo", dMonth: "Un mes", year: "Año", month: "Mes",
     calLang: "Idioma del calendario", weekStart: "La semana empieza en", mon: "Lunes", sun: "Domingo",
     format: "Formato", fBmp: "BMP (para el lector)",
-    fmtHint: "El BMP se ve directo en el X4 Pro, sin conversión. El PNG sirve para verlo o compartirlo.",
+    fmtHint: "El BMP se ve directo en el lector, sin conversión. El PNG sirve para verlo o compartirlo.",
     dlOne: "Descargar imagen", dlZip: "Año completo + 12 meses (ZIP)",
     howTitle: "Cómo ponerlo en el lector",
     how1: "Copia el BMP a la raíz de la tarjeta SD y nómbralo <code>sleep.bmp</code>.",
@@ -234,11 +252,13 @@ const UI = {
     zipped: "Aquí el BMP va dentro de un ZIP. En la página de GitHub se descarga directo.",
   },
   en: {
-    title: "Calendar for CrossPoint", spec: "Xteink X4 Pro · 480 × 800 · 2-bit BMP (4 grays)",
+    title: "Calendar for CrossPoint", specFmt: "2-bit BMP (4 grays)",
+    device: "Device", px: "px, portrait", custom: "Custom size",
+    deviceHint: "CrossPoint shows the image pixel for pixel without scaling, so it has to match your screen.",
     design: "Design", dYear: "Full year", dMonth: "One month", year: "Year", month: "Month",
     calLang: "Calendar language", weekStart: "Week starts on", mon: "Monday", sun: "Sunday",
     format: "Format", fBmp: "BMP (for the reader)",
-    fmtHint: "BMP displays on the X4 Pro directly, with no conversion. PNG is for viewing or sharing.",
+    fmtHint: "BMP displays on the reader directly, with no conversion. PNG is for viewing or sharing.",
     dlOne: "Download image", dlZip: "Full year + 12 months (ZIP)",
     howTitle: "How to put it on the reader",
     how1: "Copy the BMP to the root of the SD card and name it <code>sleep.bmp</code>.",
@@ -260,10 +280,23 @@ const CAL = {
         file: "calendar", start: "sun" },
 };
 
+// Screen sizes from the CrossPoint firmware and its display SDK, in portrait (width × height).
+// Same list as crosspoint-pages.
+const DEVICES = [
+  { id: "x4",        name: "Xteink X4 / X4 Pro / X4 Classic", short: "Xteink X4",   w: 480, h: 800 },
+  { id: "x3",        name: "Xteink X3",                       short: "Xteink X3",   w: 528, h: 792 },
+  { id: "papermono", name: "M5 PaperMono / PaperMono Lite",   short: "PaperMono",   w: 480, h: 800 },
+  { id: "sticky",    name: "Seeed reTerminal Sticky",         short: "Sticky",      w: 480, h: 800 },
+  { id: "picco",     name: "Boox Picco",                      short: "Picco",       w: 480, h: 800 },
+  { id: "metalio",   name: "Metalio E-Ink 4",                 short: "E-Ink 4",     w: 480, h: 800 },
+  { id: "eego",      name: "EEGOREAD A4",                     short: "EEGOREAD A4", w: 552, h: 768 },
+  { id: "custom",    name: null,                              short: null,          w: 480, h: 800 },
+];
+
 // ---------------------------------------------------------------- state
 const $ = (s) => document.querySelector(s);
 const state = { design: "year", year: new Date().getFullYear(), month: new Date().getMonth() + 1,
-                lang: "es", week: null, fmt: "bmp", ui: "es" };
+                lang: "es", week: null, fmt: "bmp", ui: "es", device: "x4", cw: 480, ch: 800 };
 try {
   const saved = JSON.parse(localStorage.getItem("cp-cal") || "null");
   if (saved) Object.assign(state, saved);
@@ -274,6 +307,13 @@ if (!localStorageHas()) {
 }
 function localStorageHas() { try { return !!localStorage.getItem("cp-cal"); } catch (e) { return false; } }
 function persist() { try { localStorage.setItem("cp-cal", JSON.stringify(state)); } catch (e) {} }
+
+function device() { return DEVICES.find(d => d.id === state.device) || DEVICES[0]; }
+function clampSize(v) { return Math.min(2048, Math.max(240, Math.round(+v) || 480)); }
+function size() {
+  const d = device();
+  return d.id === "custom" ? { W: clampSize(state.cw), H: clampSize(state.ch) } : { W: d.w, H: d.h };
+}
 
 // ---------------------------------------------------------------- calendar math
 // Monday-first index: Mon=0 … Sun=6
@@ -300,7 +340,14 @@ function cols(lang, startMon) {
 }
 
 // ---------------------------------------------------------------- drawing
-const W = 480, H = 800;
+// Both designs are laid out on a 480 × 800 grid. On other screens, horizontal measures follow
+// the width, vertical ones the height, and type follows the smaller of the two, so nothing
+// overflows. At 480 × 800 every factor is 1 and the output is unchanged.
+function scaler(W, H) {
+  const sx = W / 480, sy = H / 800, k = Math.min(sx, sy);
+  return { W, H, x: (n) => n * sx, y: (n) => n * sy, f: (n) => Math.round(n * k * 10) / 10,
+           t: (n) => Math.max(1, Math.round(n * k)) };
+}
 const metricsCache = new Map();
 function metrics(g, font) {
   if (!metricsCache.has(font)) {
@@ -330,79 +377,82 @@ function line(g, x0, y0, x1, y1, w = 1) {
 const PLEX = '"IBM Plex Sans", sans-serif', PLEXC = '"IBM Plex Sans Condensed", sans-serif', INTER = 'Inter, sans-serif',
       INTERD = '"Inter Display", Inter, sans-serif';
 
-function drawYear(g, o) {
+function drawYear(g, o, z) {
+  const { W, x, y, f, t } = z;
   const c = cols(o.lang, o.startMon), L = CAL[o.lang];
-  const M = 18, GAP = 16, colw = (W - 2 * M - 2 * GAP) / 3, cell = colw / 7;
-  const F = { year: `700 68px ${PLEX}`, month: `700 15px ${PLEX}`, wd: `500 10px ${PLEXC}`,
-              day: `400 14px ${PLEXC}`, bold: `700 14px ${PLEXC}` };
-  text(g, M - 4, 6, String(o.year), F.year);
-  rect(g, M, 96, W - M, 99);
-  const top = 114, rowh = 17.5, blockh = 168;
+  const M = x(18), GAP = x(16), colw = (W - 2 * M - 2 * GAP) / 3, cell = colw / 7;
+  const F = { year: `700 ${f(68)}px ${PLEX}`, month: `700 ${f(15)}px ${PLEX}`, wd: `500 ${f(10)}px ${PLEXC}`,
+              day: `400 ${f(14)}px ${PLEXC}`, bold: `700 ${f(14)}px ${PLEXC}` };
+  text(g, M - x(4), y(6), String(o.year), F.year);
+  rect(g, M, Math.round(y(96)), W - M, Math.round(y(96)) + t(3));
+  const top = y(114), rowh = y(17.5), blockh = y(168);
   for (let i = 0; i < 12; i++) {
     const m = i + 1, cx = M + (i % 3) * (colw + GAP), cy = top + Math.floor(i / 3) * blockh;
     text(g, cx, cy, L.months[i].toUpperCase(), F.month);
-    c.wd1.forEach((s, k) => text(g, cx + cell * k + cell / 2, cy + 26, s, F.wd, "ma"));
-    line(g, cx, cy + 40, cx + colw, cy + 40);
+    c.wd1.forEach((s, k) => text(g, cx + cell * k + cell / 2, cy + y(26), s, F.wd, "ma"));
+    line(g, cx, cy + y(40), cx + colw, cy + y(40), t(1));
     weeks(o.year, m, o.startMon).forEach((wk, r) => wk.forEach((day, k) => {
-      if (day) text(g, cx + cell * k + cell / 2, cy + 46 + r * rowh, String(day), k === c.sunday ? F.bold : F.day, "ma");
+      if (day) text(g, cx + cell * k + cell / 2, cy + y(46) + r * rowh, String(day), k === c.sunday ? F.bold : F.day, "ma");
     }));
   }
 }
 
-function drawMonth(g, o) {
+function drawMonth(g, o, z) {
+  const { W, x, y, f, t } = z;
   const c = cols(o.lang, o.startMon), L = CAL[o.lang];
-  const M = 28;
+  const M = x(28);
   const name = L.months[o.month - 1];
-  let size = 56;
+  let size = f(56);
   g.font = `700 ${size}px ${INTERD}`;
-  while (g.measureText(name).width > W - 2 * M && size > 36) { size -= 2; g.font = `700 ${size}px ${INTERD}`; }
+  while (g.measureText(name).width > W - 2 * M && size > f(36)) { size -= 2; g.font = `700 ${size}px ${INTERD}`; }
   const fMon = `700 ${size}px ${INTERD}`, fYr = `300 ${size}px ${INTERD}`;
-  text(g, M - 2, 30, name, fMon);
-  g.font = fMon; const nx = M - 2 + g.measureText(name).width + 12;
+  text(g, M - x(2), y(30), name, fMon);
+  g.font = fMon; const nx = M - x(2) + g.measureText(name).width + x(12);
   g.font = fYr; const yw = g.measureText(String(o.year)).width;
-  let gy = 120;
-  if (nx + yw > W - M) { text(g, M - 2, 30 + size * 1.1, String(o.year), fYr); gy = 120 + Math.floor(size * 1.1); }
-  else text(g, nx, 30, String(o.year), fYr);
+  let gy = Math.round(y(120));
+  if (nx + yw > W - M) { text(g, M - x(2), y(30) + size * 1.1, String(o.year), fYr); gy = Math.round(y(120)) + Math.floor(size * 1.1); }
+  else text(g, nx, y(30), String(o.year), fYr);
 
-  const F = { wd: `600 11px ${INTER}`, big: `400 25px ${INTER}`, bigb: `700 25px ${INTER}`,
-              smt: `700 16px ${INTER}`, smwd: `600 9px ${INTER}`, sm: `400 14px ${INTER}`, smb: `700 14px ${INTER}` };
+  const F = { wd: `600 ${f(11)}px ${INTER}`, big: `400 ${f(25)}px ${INTER}`, bigb: `700 ${f(25)}px ${INTER}`,
+              smt: `700 ${f(16)}px ${INTER}`, smwd: `600 ${f(9)}px ${INTER}`, sm: `400 ${f(14)}px ${INTER}`, smb: `700 ${f(14)}px ${INTER}` };
   const gw = W - 2 * M, cw = gw / 7;
-  rect(g, M, gy, W - M, gy + 2);
-  c.wd3.forEach((s, k) => text(g, M + cw * k + cw / 2, gy + 12, s, F.wd, "ma"));
-  const rh = 46, g0 = gy + 40;
+  rect(g, M, gy, W - M, gy + t(2));
+  c.wd3.forEach((s, k) => text(g, M + cw * k + cw / 2, gy + y(12), s, F.wd, "ma"));
+  const rh = y(46), g0 = gy + y(40);
   const real = weeks(o.year, o.month, o.startMon, false);
   real.forEach((wk, r) => {
     const ry = g0 + r * rh;
-    line(g, M, ry, W - M, ry);
+    line(g, M, ry, W - M, ry, t(1));
     wk.forEach((day, k) => {
       if (day) text(g, M + cw * k + cw / 2, ry + rh / 2, String(day), k === c.sunday ? F.bigb : F.big, "mm");
     });
   });
-  const gend = g0 + real.length * rh;
-  rect(g, M, gend, W - M, gend + 2);
+  const gend = Math.round(g0 + real.length * rh);
+  rect(g, M, gend, W - M, gend + t(2));
 
-  const GAP = 28, sw = (gw - GAP) / 2, sc = sw / 7, sy = gend + 40 + (6 - real.length) * 10;
+  const GAP = x(28), sw = (gw - GAP) / 2, sc = sw / 7, sy = gend + y(40) + (6 - real.length) * y(10);
   for (let j = 0; j < 2; j++) {
     let mm = o.month + 1 + j, yy = o.year;
     if (mm > 12) { mm -= 12; yy += 1; }
     const sx = M + j * (sw + GAP);
     text(g, sx, sy, L.months[mm - 1] + (yy === o.year ? "" : ` ${yy}`), F.smt);
-    c.wd1.forEach((s, k) => text(g, sx + sc * k + sc / 2, sy + 28, s, F.smwd, "ma"));
-    line(g, sx, sy + 44, sx + sw, sy + 44);
+    c.wd1.forEach((s, k) => text(g, sx + sc * k + sc / 2, sy + y(28), s, F.smwd, "ma"));
+    line(g, sx, sy + y(44), sx + sw, sy + y(44), t(1));
     weeks(yy, mm, o.startMon).forEach((wk, r) => wk.forEach((day, k) => {
-      if (day) text(g, sx + sc * k + sc / 2, sy + 54 + r * 27, String(day), k === c.sunday ? F.smb : F.sm, "ma");
+      if (day) text(g, sx + sc * k + sc / 2, sy + y(54) + r * y(27), String(day), k === c.sunday ? F.smb : F.sm, "ma");
     }));
   }
 }
 
-// Render to an offscreen canvas and snap every pixel to the X4's 4 gray levels,
+// Render to an offscreen canvas and snap every pixel to the screen's 4 gray levels,
 // so the preview is exactly what the reader will show.
 function render(o) {
+  const { W, H } = o;
   const cv = document.createElement("canvas");
   cv.width = W; cv.height = H;
   const g = cv.getContext("2d", { willReadFrequently: true });
   g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
-  (o.design === "year" ? drawYear : drawMonth)(g, o);
+  (o.design === "year" ? drawYear : drawMonth)(g, o, scaler(W, H));
   const img = g.getImageData(0, 0, W, H), p = img.data;
   const levels = new Uint8Array(W * H);
   for (let i = 0, j = 0; i < p.length; i += 4, j++) {
@@ -412,11 +462,11 @@ function render(o) {
     p[i] = p[i + 1] = p[i + 2] = lv * 85; p[i + 3] = 255;
   }
   g.putImageData(img, 0, 0);
-  return { canvas: cv, levels };
+  return { canvas: cv, levels, W, H };
 }
 
 // Uncompressed 2-bit BMP (index 0 = black … 3 = white), the format CrossPoint draws natively.
-function bmp2(levels) {
+function bmp2({ levels, W, H }) {
   const rowBytes = Math.ceil((W * 2) / 32) * 4, dataSize = rowBytes * H, off = 14 + 40 + 16;
   const buf = new ArrayBuffer(off + dataSize), v = new DataView(buf), u = new Uint8Array(buf);
   v.setUint8(0, 0x42); v.setUint8(1, 0x4d);
@@ -436,14 +486,19 @@ function png(canvas) { return new Promise(r => canvas.toBlob(r, "image/png")); }
 
 // ---------------------------------------------------------------- files
 function slug(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+// The X4 size keeps the original names; other sizes add the device (or WxH) so files don't mix.
+function sizeTag(o) {
+  if (o.W === 480 && o.H === 800 && o.device !== "custom") return "";
+  return "-" + (o.device === "custom" ? `${o.W}x${o.H}` : o.device);
+}
 function fileName(o) {
   const L = CAL[o.lang];
   const base = o.design === "year" ? `${L.file}-${o.year}`
     : `${L.file}-${o.year}-${String(o.month).padStart(2, "0")}-${slug(L.months[o.month - 1])}`;
-  return `${base}.${o.fmt}`;
+  return `${base}${sizeTag(o)}.${o.fmt}`;
 }
-function zipName(o) { return `${CAL[o.lang].file}-${o.year}-${o.lang}.zip`; }
-async function blobFor(o) { const r = render(o); return o.fmt === "bmp" ? bmp2(r.levels) : png(r.canvas); }
+function zipName(o) { return `${CAL[o.lang].file}-${o.year}-${o.lang}${sizeTag(o)}.zip`; }
+async function blobFor(o) { const r = render(o); return o.fmt === "bmp" ? bmp2(r) : png(r.canvas); }
 
 // Inside the Claude viewer, files go through its download prompt (BMP is not on its list, so it is
 // zipped there). Everywhere else — GitHub Pages, a local copy — a normal browser download.
@@ -476,8 +531,9 @@ const t = (k) => UI[state.ui][k];
 function say(s) { $("#status").textContent = s; }
 function opts(over = {}) {
   const startMon = (state.week || CAL[state.lang].start) === "mon";
+  const { W, H } = size();
   return { design: state.design, year: state.year, month: state.month, lang: state.lang,
-           startMon, fmt: state.fmt, ...over };
+           startMon, fmt: state.fmt, device: device().id, W, H, ...over };
 }
 function check(name, value) { const el = document.querySelector(`input[name="${name}"][value="${value}"]`); if (el) el.checked = true; }
 
@@ -491,18 +547,26 @@ function applyUI() {
   check("week", state.week || CAL[state.lang].start); check("fmt", state.fmt);
   $("#year").value = state.year;
   $("#month-field").hidden = state.design !== "month";
+  const dev = $("#device");
+  dev.innerHTML = DEVICES.map(d => `<option value="${d.id}">${d.id === "custom" ? t("custom") : `${d.name} — ${d.w} × ${d.h}`}</option>`).join("");
+  dev.value = state.device;
+  $("#custom").hidden = state.device !== "custom";
+  $("#cw").value = clampSize(state.cw); $("#ch").value = clampSize(state.ch);
 }
 
-let pending = 0;
 function update() {
   applyUI();
   const o = opts();
   const r = render(o);
-  const g = $("#screen").getContext("2d");
-  g.drawImage(r.canvas, 0, 0);
+  const screen = $("#screen");
+  if (screen.width !== o.W || screen.height !== o.H) { screen.width = o.W; screen.height = o.H; }
+  screen.style.aspectRatio = `${o.W} / ${o.H}`;
+  screen.getContext("2d").drawImage(r.canvas, 0, 0);
+  const d = device();
+  $("#spec").textContent = `${d.id === "custom" ? t("custom") : d.short} · ${o.W} × ${o.H} · ${t("specFmt")}`;
   $("#dl-one-name").textContent = fileName(o);
   $("#dl-zip-name").textContent = zipName(o);
-  $("#caption").textContent = `${fileName(o)} · 480 × 800`;
+  $("#caption").textContent = `${fileName(o)} · ${o.W} × ${o.H}`;
   persist();
 }
 
@@ -515,6 +579,8 @@ document.addEventListener("change", (e) => {
   if (el.name === "fmt") state.fmt = el.value;
   if (el.id === "month") state.month = +el.value;
   if (el.id === "year") setYear(+el.value);
+  if (el.id === "device") state.device = el.value;
+  if (el.id === "cw" || el.id === "ch") state[el.id] = clampSize(el.value);
   update();
 });
 $("#year").addEventListener("input", (e) => { const y = +e.target.value; if (y >= 1900 && y <= 2200) { state.year = y; update(); } });

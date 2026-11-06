@@ -1,6 +1,6 @@
 # CrossPoint Calendar
 
-Un generador web de calendarios para la pantalla de reposo de [CrossPoint Reader](https://crosspointreader.com/), hecho para el Xteink X4 Pro (480 × 800).
+Un generador web de calendarios para la pantalla de reposo de [CrossPoint Reader](https://crosspointreader.com/), hecho para el Xteink X4 Pro y compatible con todas las pantallas que soporta CrossPoint.
 
 **Úsalo aquí: [aendom.github.io/crosspoint-calendar](https://aendom.github.io/crosspoint-calendar/)**
 
@@ -8,7 +8,7 @@ Un generador web de calendarios para la pantalla de reposo de [CrossPoint Reader
 
 ![El generador](docs/screenshot-es.png)
 
-Elige un diseño, un año y, si quieres, un mes. Descarga la imagen y cópiala a tu lector. Todo funciona en tu navegador: no hay servidor, no necesitas cuenta y no hay nada que instalar.
+Elige tu dispositivo, un diseño, un año y, si quieres, un mes. Descarga la imagen y cópiala a tu lector. Todo funciona en tu navegador: no hay servidor, no necesitas cuenta y no hay nada que instalar.
 
 ## Qué puedes generar
 
@@ -20,7 +20,24 @@ Los calendarios vienen en **español o inglés**, y la semana puede empezar en *
 
 ![Calendarios anual y mensual hechos con el generador](docs/results-es.png)
 
-Estas son las imágenes reales que descarga el generador, al tamaño del lector: 480 × 800.
+Estas son las imágenes reales que descarga el generador, al tamaño del Xteink X4: 480 × 800.
+
+## Dispositivos
+
+CrossPoint muestra la imagen de reposo píxel por píxel, sin escalar, así que tiene que coincidir con la pantalla. Elige tu dispositivo y los dos diseños se ajustan a su tamaño. Los tamaños vienen del firmware de CrossPoint y de su SDK de pantallas:
+
+| Dispositivo | Tamaño (vertical) |
+|---|---|
+| Xteink X4 / X4 Pro / X4 Classic | 480 × 800 |
+| Xteink X3 | 528 × 792 |
+| M5 PaperMono / PaperMono Lite | 480 × 800 |
+| Seeed reTerminal Sticky | 480 × 800 |
+| Boox Picco | 480 × 800 |
+| Metalio E-Ink 4 | 480 × 800 |
+| EEGOREAD A4 | 552 × 768 |
+| Personalizado | cualquier tamaño de 240 a 2048 px |
+
+Los archivos del tamaño X4 conservan su nombre simple (`calendario-2027.bmp`). Los demás tamaños agregan el dispositivo, por ejemplo `calendario-2027-x3.bmp`.
 
 ## Cómo ponerlo en el lector
 
@@ -38,7 +55,7 @@ No pongas las imágenes de los meses en la carpeta `/.sleep`. CrossPoint elige u
 
 ## Por qué BMP
 
-La pantalla del X4 Pro muestra 4 niveles de gris, y CrossPoint dibuja los BMP de 2 bits directamente, sin convertirlos. El generador crea justo ese formato (unos 94 KB por imagen), así que la vista previa de la página es igual a lo que se ve en el lector. El PNG es para ver o compartir el calendario.
+Las pantallas de CrossPoint muestran 4 niveles de gris, y CrossPoint dibuja los BMP de 2 bits directamente, sin convertirlos. El generador crea justo ese formato (unos 94 KB por imagen del X4), así que la vista previa de la página es igual a lo que se ve en el lector. El PNG es para ver o compartir el calendario.
 
 ## Notas de diseño
 

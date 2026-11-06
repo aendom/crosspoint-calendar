@@ -1,6 +1,6 @@
 # CrossPoint Calendar
 
-A web generator for e-ink calendar images for [CrossPoint Reader](https://crosspointreader.com/), made for the Xteink X4 Pro (480 × 800).
+A web generator for e-ink calendar images for [CrossPoint Reader](https://crosspointreader.com/). Made for the Xteink X4 Pro, and it works with every screen CrossPoint supports.
 
 **Use it here: [aendom.github.io/crosspoint-calendar](https://aendom.github.io/crosspoint-calendar/)**
 
@@ -8,7 +8,7 @@ A web generator for e-ink calendar images for [CrossPoint Reader](https://crossp
 
 ![The generator](docs/screenshot-en.png)
 
-Pick a design, a year and, if you want, a month. Then download the image and copy it to your reader. Everything runs in your browser: there is no server, no account and nothing to install.
+Pick your device, a design, a year and, if you want, a month. Then download the image and copy it to your reader. Everything runs in your browser: there is no server, no account and nothing to install.
 
 ## What you can make
 
@@ -20,7 +20,24 @@ Calendars come in **Spanish or English**, with the week starting on **Monday or 
 
 ![Year and month calendars made with the generator](docs/results-en.png)
 
-These are the actual images the generator downloads, at the reader's 480 × 800 size.
+These are the actual images the generator downloads, at the Xteink X4's 480 × 800 size.
+
+## Devices
+
+CrossPoint shows the sleep image pixel for pixel without scaling, so the image has to match the screen. Pick your device and both designs adapt to its size. Sizes come from the CrossPoint firmware and its display SDK:
+
+| Device | Size (portrait) |
+|---|---|
+| Xteink X4 / X4 Pro / X4 Classic | 480 × 800 |
+| Xteink X3 | 528 × 792 |
+| M5 PaperMono / PaperMono Lite | 480 × 800 |
+| Seeed reTerminal Sticky | 480 × 800 |
+| Boox Picco | 480 × 800 |
+| Metalio E-Ink 4 | 480 × 800 |
+| EEGOREAD A4 | 552 × 768 |
+| Custom | any size from 240 to 2048 px |
+
+Files for the X4 size keep plain names (`calendar-2027.bmp`). Other sizes add the device, for example `calendar-2027-x3.bmp`.
 
 ## Put it on your reader
 
@@ -38,7 +55,7 @@ Don't put the month images in the `/.sleep` folder. CrossPoint picks a random im
 
 ## Why BMP
 
-The X4 Pro screen shows 4 levels of gray, and CrossPoint draws 2-bit BMP files directly, with no conversion. The generator writes exactly that format (about 94 KB per image), so the preview on the page is exactly what the reader shows. PNG is there for viewing or sharing the calendar.
+CrossPoint screens show 4 levels of gray, and CrossPoint draws 2-bit BMP files directly, with no conversion. The generator writes exactly that format (about 94 KB for an X4 image), so the preview on the page is exactly what the reader shows. PNG is there for viewing or sharing the calendar.
 
 ## Design notes
 
