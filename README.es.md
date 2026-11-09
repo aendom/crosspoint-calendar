@@ -22,6 +22,12 @@ Los calendarios vienen en **español o inglés**, y la semana puede empezar en *
 
 Estas son las imágenes reales que descarga el generador, al tamaño del Xteink X4: 480 × 800.
 
+### Meses pequeños
+
+En el diseño mensual eliges qué dos meses van debajo del mes principal: los **dos siguientes**, o el **anterior y el siguiente**. Cuando un mes pequeño es de otro año, aparece con el año.
+
+![Meses pequeños: los dos siguientes, o el anterior y el siguiente](docs/small-months-es.png)
+
 ## Dispositivos
 
 CrossPoint muestra la imagen de reposo píxel por píxel, sin escalar, así que tiene que coincidir con la pantalla. Elige tu dispositivo y los dos diseños se ajustan a su tamaño. Los tamaños vienen del firmware de CrossPoint y de su SDK de pantallas:

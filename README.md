@@ -22,6 +22,12 @@ Calendars come in **Spanish or English**, with the week starting on **Monday or 
 
 These are the actual images the generator downloads, at the Xteink X4's 480 × 800 size.
 
+### Small months
+
+In the month design, choose which two months go below the main grid: the **next two**, or the **month before and the month after**. When a small month falls in another year, it shows the year.
+
+![Small months: next two, or previous and next](docs/small-months-en.png)
+
 ## Devices
 
 CrossPoint shows the sleep image pixel for pixel without scaling, so the image has to match the screen. Pick your device and both designs adapt to its size. Sizes come from the CrossPoint firmware and its display SDK:
