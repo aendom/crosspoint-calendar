@@ -174,6 +174,14 @@ footer a { color: var(--ink); }
         <select id="month"></select>
       </div>
 
+      <div class="field" id="minis-field" hidden>
+        <span class="label" data-t="minis">Meses pequeños</span>
+        <div class="seg" role="radiogroup">
+          <input type="radio" name="minis" id="m-next" value="next"><label for="m-next" data-t="mNext">Los dos siguientes</label>
+          <input type="radio" name="minis" id="m-around" value="around"><label for="m-around" data-t="mAround">Anterior y siguiente</label>
+        </div>
+      </div>
+
       <div class="field">
         <span class="label" data-t="calLang">Idioma del calendario</span>
         <div class="seg" role="radiogroup">
@@ -238,6 +246,7 @@ const UI = {
     device: "Dispositivo", px: "px, vertical", custom: "Tamaño personalizado",
     deviceHint: "CrossPoint muestra la imagen píxel por píxel, sin escalar, así que tiene que coincidir con tu pantalla.",
     design: "Diseño", dYear: "Año completo", dMonth: "Un mes", year: "Año", month: "Mes",
+    minis: "Meses pequeños", mNext: "Los dos siguientes", mAround: "Anterior y siguiente",
     calLang: "Idioma del calendario", weekStart: "La semana empieza en", mon: "Lunes", sun: "Domingo",
     format: "Formato", fBmp: "BMP (para el lector)",
     fmtHint: "El BMP se ve directo en el lector, sin conversión. El PNG sirve para verlo o compartirlo.",
@@ -256,6 +265,7 @@ const UI = {
     device: "Device", px: "px, portrait", custom: "Custom size",
     deviceHint: "CrossPoint shows the image pixel for pixel without scaling, so it has to match your screen.",
     design: "Design", dYear: "Full year", dMonth: "One month", year: "Year", month: "Month",
+    minis: "Small months", mNext: "Next two", mAround: "Previous and next",
     calLang: "Calendar language", weekStart: "Week starts on", mon: "Monday", sun: "Sunday",
     format: "Format", fBmp: "BMP (for the reader)",
     fmtHint: "BMP displays on the reader directly, with no conversion. PNG is for viewing or sharing.",
@@ -296,7 +306,7 @@ const DEVICES = [
 // ---------------------------------------------------------------- state
 const $ = (s) => document.querySelector(s);
 const state = { design: "year", year: new Date().getFullYear(), month: new Date().getMonth() + 1,
-                lang: "es", week: null, fmt: "bmp", ui: "es", device: "x4", cw: 480, ch: 800 };
+                lang: "es", week: null, fmt: "bmp", ui: "es", device: "x4", cw: 480, ch: 800, minis: "next" };
 try {
   const saved = JSON.parse(localStorage.getItem("cp-cal") || "null");
   if (saved) Object.assign(state, saved);
@@ -431,9 +441,12 @@ function drawMonth(g, o, z) {
   rect(g, M, gend, W - M, gend + t(2));
 
   const GAP = x(28), sw = (gw - GAP) / 2, sc = sw / 7, sy = gend + y(40) + (6 - real.length) * y(10);
+  // "next": the two months after. "around": the month before on the left, the month after on the right.
+  const offsets = o.minis === "around" ? [-1, 1] : [1, 2];
   for (let j = 0; j < 2; j++) {
-    let mm = o.month + 1 + j, yy = o.year;
+    let mm = o.month + offsets[j], yy = o.year;
     if (mm > 12) { mm -= 12; yy += 1; }
+    if (mm < 1) { mm += 12; yy -= 1; }
     const sx = M + j * (sw + GAP);
     text(g, sx, sy, L.months[mm - 1] + (yy === o.year ? "" : ` ${yy}`), F.smt);
     c.wd1.forEach((s, k) => text(g, sx + sc * k + sc / 2, sy + y(28), s, F.smwd, "ma"));
@@ -533,7 +546,7 @@ function opts(over = {}) {
   const startMon = (state.week || CAL[state.lang].start) === "mon";
   const { W, H } = size();
   return { design: state.design, year: state.year, month: state.month, lang: state.lang,
-           startMon, fmt: state.fmt, device: device().id, W, H, ...over };
+           startMon, fmt: state.fmt, device: device().id, W, H, minis: state.minis, ...over };
 }
 function check(name, value) { const el = document.querySelector(`input[name="${name}"][value="${value}"]`); if (el) el.checked = true; }
 
@@ -547,6 +560,8 @@ function applyUI() {
   check("week", state.week || CAL[state.lang].start); check("fmt", state.fmt);
   $("#year").value = state.year;
   $("#month-field").hidden = state.design !== "month";
+  $("#minis-field").hidden = state.design !== "month";
+  check("minis", state.minis);
   const dev = $("#device");
   dev.innerHTML = DEVICES.map(d => `<option value="${d.id}">${d.id === "custom" ? t("custom") : `${d.name} — ${d.w} × ${d.h}`}</option>`).join("");
   dev.value = state.device;
@@ -577,6 +592,7 @@ document.addEventListener("change", (e) => {
   if (el.name === "lang") { state.lang = el.value; state.week = null; }   // week start follows the language
   if (el.name === "week") state.week = el.value;
   if (el.name === "fmt") state.fmt = el.value;
+  if (el.name === "minis") state.minis = el.value;
   if (el.id === "month") state.month = +el.value;
   if (el.id === "year") setYear(+el.value);
   if (el.id === "device") state.device = el.value;
