@@ -13,7 +13,7 @@ Elige tu dispositivo, un diseño, un año y, si quieres, un mes. Descarga la ima
 ## Qué puedes generar
 
 - **Año completo**: los 12 meses en una sola pantalla.
-- **Un mes**: el mes en grande, con los dos meses siguientes abajo.
+- **Un mes**: el mes en grande, con dos meses pequeños abajo: los dos siguientes, o el anterior y el siguiente.
 - **Año completo + 12 meses (ZIP)**: la imagen del año y las 12 de los meses en una sola descarga.
 
 Los calendarios vienen en **español o inglés**, y la semana puede empezar en **lunes o domingo**. Los domingos van en negritas.

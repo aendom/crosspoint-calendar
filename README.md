@@ -13,7 +13,7 @@ Pick your device, a design, a year and, if you want, a month. Then download the 
 ## What you can make
 
 - **Full year**: all 12 months on one screen.
-- **One month**: the month large, with the next two months below.
+- **One month**: the month large, with two small months below: the next two, or the month before and the month after.
 - **Full year + 12 months (ZIP)**: the year image and all 12 month images in one download.
 
 Calendars come in **Spanish or English**, with the week starting on **Monday or Sunday**. Sundays are bold.
