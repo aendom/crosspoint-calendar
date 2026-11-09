@@ -128,7 +128,7 @@ footer a { color: var(--ink); }
   <header>
     <div>
       <h1 data-t="title">Calendario para CrossPoint</h1>
-      <p class="spec" id="spec">Xteink X4 · 480 × 800 · BMP de 2 bits (4 grises)</p>
+      <p class="spec" data-t="spec">Para lectores con CrossPoint · BMP de 2 bits (4 grises)</p>
     </div>
     <div class="seg lang-ui" role="radiogroup" aria-label="Idioma / Language">
       <input type="radio" name="ui" id="ui-es" value="es"><label for="ui-es">ES</label>
@@ -242,7 +242,7 @@ footer a { color: var(--ink); }
 // ---------------------------------------------------------------- text
 const UI = {
   es: {
-    title: "Calendario para CrossPoint", specFmt: "BMP de 2 bits (4 grises)",
+    title: "Calendario para CrossPoint", spec: "Para lectores con CrossPoint · BMP de 2 bits (4 grises)",
     device: "Dispositivo", px: "px, vertical", custom: "Tamaño personalizado",
     deviceHint: "CrossPoint muestra la imagen píxel por píxel, sin escalar, así que tiene que coincidir con tu pantalla.",
     design: "Diseño", dYear: "Año completo", dMonth: "Un mes", year: "Año", month: "Mes",
@@ -261,7 +261,7 @@ const UI = {
     zipped: "Aquí el BMP va dentro de un ZIP. En la página de GitHub se descarga directo.",
   },
   en: {
-    title: "Calendar for CrossPoint", specFmt: "2-bit BMP (4 grays)",
+    title: "Calendar for CrossPoint", spec: "For CrossPoint e-readers · 2-bit BMP (4 grays)",
     device: "Device", px: "px, portrait", custom: "Custom size",
     deviceHint: "CrossPoint shows the image pixel for pixel without scaling, so it has to match your screen.",
     design: "Design", dYear: "Full year", dMonth: "One month", year: "Year", month: "Month",
@@ -577,8 +577,6 @@ function update() {
   if (screen.width !== o.W || screen.height !== o.H) { screen.width = o.W; screen.height = o.H; }
   screen.style.aspectRatio = `${o.W} / ${o.H}`;
   screen.getContext("2d").drawImage(r.canvas, 0, 0);
-  const d = device();
-  $("#spec").textContent = `${d.id === "custom" ? t("custom") : d.short} · ${o.W} × ${o.H} · ${t("specFmt")}`;
   $("#dl-one-name").textContent = fileName(o);
   $("#dl-zip-name").textContent = zipName(o);
   $("#caption").textContent = `${fileName(o)} · ${o.W} × ${o.H}`;
